@@ -1,0 +1,32 @@
+version: '3.9'
+services:
+  apiboy:
+    build:
+      context: .
+      target: transform_api
+    image: transform_api:latest
+    restart: always
+    container_name: apiboy
+    command: api
+    volumes:
+      - ./api:/usr/src/app
+      - ./docker/api/docker-entrypoint-init.d:/docker-entrypoint-init.d
+    ports:
+      - 420:8080
+    depends_on:
+      - databoy
+
+  databoy:
+    image: mariadb:latest
+    restart: always
+    container_name: databoy
+    env_file:
+      - ./docker/db/.env
+    ports:
+      - 422:3306
+    volumes:
+      - transformer-db:/var/lib/mysql
+      - ./docker/db/docker-entrypoint-init.d:/docker-entrypoint-initdb.d
+
+volumes:
+  transformer-db:
