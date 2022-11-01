@@ -23,11 +23,11 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			panic(err)
 		}
-		fmt.Fprintln(w, stringToSponge(s.Text))
+		fmt.Fprintln(w, StringToSponge(s.Text))
 	}
 }
 
-func stringToSponge(s string) string {
+func StringToSponge(s string) string {
 	rs, upper := []rune(s), false
 	for i, r := range rs {
 		if unicode.IsLetter(r) {
@@ -37,4 +37,8 @@ func stringToSponge(s string) string {
 		}
 	}
 	return string(rs)
+}
+
+func SpongeRoute() {
+	http.HandleFunc("/spongespeak", Handle)
 }
